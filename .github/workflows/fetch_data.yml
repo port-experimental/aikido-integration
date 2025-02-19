@@ -1,0 +1,24 @@
+name: sync_aikido
+on:
+    workflow_dispatch:
+    schedule:
+      - cron: '0 * * * *'
+jobs:
+    sync_aikido:
+      name: collect_coder_templates
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: oven-sh/setup-bun@v2
+        - run: bun run src/main.ts fetch-repositories
+          env: # Or as an environment variable
+            PORT_CLIENT_ID: ${{ secrets.PORT_CLIENT_ID }}
+            PORT_CLIENT_SECRET: ${{ secrets.PORT_CLIENT_SECRET }}
+            AIKIDO_CLIENT_ID: ${{ secrets.AIKIDO_CLIENT_ID }}
+            AIKIDO_CLIENT_SECRET: ${{ secrets.AIKIDO_CLIENT_SECRET }}
+        - run: bun run src/main.ts fetch-issues
+          env: # Or as an environment variable
+            PORT_CLIENT_ID: ${{ secrets.PORT_CLIENT_ID }}
+            PORT_CLIENT_SECRET: ${{ secrets.PORT_CLIENT_SECRET }}
+            AIKIDO_CLIENT_ID: ${{ secrets.AIKIDO_CLIENT_ID }}
+            AIKIDO_CLIENT_SECRET: ${{ secrets.AIKIDO_CLIENT_SECRET }}
